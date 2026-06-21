@@ -12,7 +12,7 @@ describe('index.js Component Tests', () => {
       const payload = {
         jobs: [
           { url: 'https://test.com/1', title: 'Job 1', location: ['România'] },
-          { url: 'https://test.com/2', title: 'Job 2', location: ['Bucharest'] },
+          { url: 'https://test.com/2', title: 'Job 2', location: ['Cluj-Napoca'] },
           { url: 'https://test.com/3', title: 'Job 3', location: ['Bulgaria'] },
           { url: 'https://test.com/4', title: 'Job 4', location: ['Cluj-Napoca'] },
           { url: 'https://test.com/5', title: 'Job 5', location: [] }
@@ -22,7 +22,7 @@ describe('index.js Component Tests', () => {
       const result = index.transformJobsForSOLR(payload);
 
       expect(result.jobs[0].location).toEqual(['România']);
-      expect(result.jobs[1].location).toEqual(['Bucharest']);
+      expect(result.jobs[1].location).toEqual(['Cluj-Napoca']);
       expect(result.jobs[2].location).toEqual(['România']);
       expect(result.jobs[3].location).toEqual(['Cluj-Napoca']);
       expect(result.jobs[4].location).toEqual(['România']);
@@ -30,17 +30,17 @@ describe('index.js Component Tests', () => {
 
     it('should keep company uppercase', () => {
       const payload = {
-        source: 'epam.com',
-        company: 'epam systems international srl',
-        cif: '33159615',
+        source: 'axon-soft.com',
+        company: 'axon soft srl',
+        cif: '13049596',
         jobs: [
-          { url: 'https://test.com/1', title: 'Job 1', company: 'epam systems', cif: '33159615' }
+          { url: 'https://test.com/1', title: 'Job 1', company: 'axon soft', cif: '13049596' }
         ]
       };
 
       const result = index.transformJobsForSOLR(payload);
 
-      expect(result.company).toBe('EPAM SYSTEMS INTERNATIONAL SRL');
+      expect(result.company).toBe('AXON SOFT SRL');
     });
 
     it('should normalize workmode values', () => {
@@ -70,15 +70,15 @@ describe('index.js Component Tests', () => {
   describe('mapToJobModel', () => {
     it('should map raw job to job model format', () => {
       const rawJob = {
-        url: 'https://careers.epam.com/job/123',
-        title: 'Senior Developer',
-        location: ['Bucharest'],
-        tags: ['Java', 'Spring'],
+        url: 'https://axon-soft.com/qa-automation/',
+        title: 'QA Automation Engineer',
+        location: ['Cluj-Napoca'],
+        tags: ['QA', 'Automation'],
         workmode: 'hybrid'
       };
 
-      const COMPANY_NAME = 'EPAM SYSTEMS INTERNATIONAL SRL';
-      const COMPANY_CIF = '33159615';
+      const COMPANY_NAME = 'AXON SOFT SRL';
+      const COMPANY_CIF = '13049596';
 
       const result = index.mapToJobModel(rawJob, COMPANY_CIF, COMPANY_NAME);
 
@@ -99,7 +99,7 @@ describe('index.js Component Tests', () => {
         title: 'Job 1'
       };
 
-      const result = index.mapToJobModel(rawJob, '33159615');
+      const result = index.mapToJobModel(rawJob, '13049596');
 
       expect(result.location).toBeUndefined();
       expect(result.tags).toBeUndefined();
@@ -109,112 +109,68 @@ describe('index.js Component Tests', () => {
     it('should handle missing title', () => {
       const rawJob = { url: 'https://test.com/1' };
 
-      const result = index.mapToJobModel(rawJob, '33159615');
+      const result = index.mapToJobModel(rawJob, '13049596');
 
       expect(result.title).toBeUndefined();
       expect(result.url).toBe('https://test.com/1');
     });
   });
 
-  describe('parseApiJobs', () => {
-    it('should parse EPAM API response format', () => {
-      const apiData = {
-        data: {
-          total: 100,
-          jobs: [
-            {
-              uid: '123',
-              name: 'Senior Developer',
-              city: [{ name: 'Bucharest' }],
-              country: [{ name: 'Romania' }],
-              vacancy_type: 'Hybrid',
-              skills: ['Java', 'Spring']
-            }
-          ]
-        }
-      };
+  describe('parseCareerPage', () => {
+    const sampleHtml = `<div class="fusion-panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title toggle">
+          <span class="fusion-toggle-heading">QA Automation Engineer</span>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse">
+        <div class="panel-body toggle-content">
+          <p><a href="https://axon-soft.com/qa-automation/">Read more</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="fusion-panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title toggle">
+          <span class="fusion-toggle-heading">Java Backend Developer</span>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse">
+        <div class="panel-body toggle-content">
+          <p><a href="https://axon-soft.com/backend-java/">Read more</a></p>
+        </div>
+      </div>
+    </div>`;
 
-      const result = index.parseApiJobs(apiData);
+    it('should parse jobs from career page HTML', () => {
+      const result = index.parseCareerPage(sampleHtml);
 
-      expect(result.jobs).toHaveLength(1);
-      expect(result.jobs[0].title).toBe('Senior Developer');
-      expect(result.jobs[0].location).toEqual(['Bucharest']);
-      expect(result.jobs[0].workmode).toBe('hybrid');
+      expect(result).toHaveLength(2);
+      expect(result[0].title).toBe('QA Automation Engineer');
+      expect(result[0].url).toBe('https://axon-soft.com/qa-automation/');
+      expect(result[1].title).toBe('Java Backend Developer');
+      expect(result[1].url).toBe('https://axon-soft.com/backend-java/');
     });
 
-    it('should handle empty job list', () => {
-      const apiData = { data: { total: 0, jobs: [] } };
-
-      const result = index.parseApiJobs(apiData);
-
-      expect(result.jobs).toEqual([]);
-    });
-
-    it('should handle missing data field', () => {
-      const result = index.parseApiJobs({});
-
-      expect(result.jobs).toEqual([]);
-    });
-
-    it('should handle multiple cities', () => {
-      const apiData = {
-        data: {
-          total: 1,
-          jobs: [
-            {
-              uid: '123',
-              name: 'Developer',
-              city: [{ name: 'Bucharest' }, { name: 'Cluj-Napoca' }],
-              country: [{ name: 'Romania' }]
-            }
-          ]
-        }
-      };
-
-      const result = index.parseApiJobs(apiData);
-
-      expect(result.jobs[0].location).toEqual(['Bucharest', 'Cluj-Napoca']);
+    it('should handle empty page', () => {
+      const result = index.parseCareerPage('<html></html>');
+      expect(result).toEqual([]);
     });
   });
 
-  describe('URL Generation', () => {
-    it('should use seo.url when available', () => {
-      const apiData = {
-        data: {
-          total: 1,
-          jobs: [
-            {
-              uid: 'blt123',
-              name: 'Test Job',
-              seo: { url: '/en/vacancy/test-job-blt123_en' },
-              city: [{ name: 'Bucharest' }]
-            }
-          ]
-        }
-      };
+  describe('parseJobDetail', () => {
+    const sampleHtml = `<html><body><main><h1>QA Automation Engineer</h1>
+      <p>We are looking for QA Automation Engineers</p>
+    </main></body></html>`;
 
-      const result = index.parseApiJobs(apiData);
+    it('should parse job detail page', () => {
+      const baseJob = { url: 'https://axon-soft.com/qa-automation/', title: 'QA Automation Engineer' };
+      const result = index.parseJobDetail(sampleHtml, baseJob);
 
-      expect(result.jobs[0].url).toBe('https://careers.epam.com/en/vacancy/test-job-blt123_en');
-    });
-
-    it('should fallback to uid-based URL when no seo.url', () => {
-      const apiData = {
-        data: {
-          total: 1,
-          jobs: [
-            {
-              uid: 'blt456',
-              name: 'Test Job',
-              city: [{ name: 'Bucharest' }]
-            }
-          ]
-        }
-      };
-
-      const result = index.parseApiJobs(apiData);
-
-      expect(result.jobs[0].url).toBe('https://careers.epam.com/en/vacancy/blt456_en');
+      expect(result.url).toBe(baseJob.url);
+      expect(result.title).toBe('QA Automation Engineer');
+      expect(result.location).toEqual(['Cluj-Napoca']);
+      expect(result.workmode).toBe('hybrid');
     });
   });
 });

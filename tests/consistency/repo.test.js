@@ -2,12 +2,12 @@ import fetch from "node-fetch";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import companyConfig from "../../config/company.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = process.env.GITHUB_REPOSITORY;
 const TOKEN = process.env.GITHUB_TOKEN;
 const SCRAPER_YML = ".github/workflows/job-seeker-ro-spider.yml";
-
 
 function repoUrl(apiPath) {
   return `https://api.github.com/repos/${REPO}${apiPath}`;
@@ -27,6 +27,8 @@ function skipIfNoRepo() {
   }
   return false;
 }
+
+const BRAND = companyConfig.brand;
 
 describe("Repository Configuration", () => {
   describe("default branch", () => {
@@ -50,8 +52,6 @@ describe("Repository Configuration", () => {
       expect(data.homepage).toMatch(/^https?:\/\//);
       console.log(`✅ GitHub Pages URL: ${data.homepage}`);
     });
-
-    // deploy.yml removed — legacy GitHub Pages auto-deploys from docs/
   });
 
   describe("hosted HTML page", () => {
@@ -76,7 +76,7 @@ describe("Repository Configuration", () => {
       const html = await res.text();
       expect(html).toContain("<!DOCTYPE html>");
       expect(html).toContain("peviitor");
-      expect(html).toContain("EPAM");
+      expect(html).toContain("Axon Soft");
       console.log(`✅ GitHub Pages HTML loaded from ${pagesUrl}`);
     });
   });

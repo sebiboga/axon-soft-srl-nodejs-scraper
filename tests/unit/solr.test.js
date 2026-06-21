@@ -186,14 +186,14 @@ describe('solr.js', () => {
 
     it('should have valid CIF format for all jobs', async () => {
       mockFetch.mockResolvedValue(makeSolrResponse(2, [
-        { url: 'https://test.com/1', title: 'Job 1', cif: '33159615' },
-        { url: 'https://test.com/2', title: 'Job 2', cif: '12345678' }
+        { url: 'https://test.com/1', title: 'Job 1', cif: '13049596' },
+        { url: 'https://test.com/2', title: 'Job 2', cif: '1234567' }
       ]));
 
-      const result = await solr.querySOLR('33159615');
+      const result = await solr.querySOLR('13049596');
 
       for (const job of result.docs) {
-        expect(job.cif).toMatch(/^\d{8}$/);
+        expect(job.cif).toMatch(/^\d{6,9}$/);
       }
     });
 
@@ -205,7 +205,7 @@ describe('solr.js', () => {
       const result = await solr.querySOLR('abc');
 
       for (const job of result.docs) {
-        expect(job.cif).not.toMatch(/^\d{8}$/);
+        expect(job.cif).not.toMatch(/^\d{6,9}$/);
       }
     });
 
