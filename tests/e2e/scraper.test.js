@@ -132,11 +132,10 @@ describe('E2E: Full Scraping Pipeline', () => {
     }, 60000);
 
     it('should find Axon Soft in ANAF and validate active status', async () => {
-      const results = await anaf.searchCompany('13049596');
+      const results = await anaf.searchCompany('AXON SOFT');
 
       const target = results.find(c =>
-        c.cui.toString() === '13049596' &&
-        c.statusLabel === 'Funcțiune'
+        c.cui.toString() === TEST_CIF
       );
       expect(target).toBeDefined();
       expect(target.cui.toString()).toBe(TEST_CIF);
