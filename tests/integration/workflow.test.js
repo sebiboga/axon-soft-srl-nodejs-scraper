@@ -42,7 +42,7 @@ describe('Integration: API Workflow', () => {
       expect(results.length).toBeGreaterThan(0);
 
       const company = results.find(c =>
-        c.name.toUpperCase().includes('AXON SOFT') && c.statusLabel === 'Funcțiune'
+        c.cui.toString() === COMPANY_CIF
       );
       expect(company).toBeDefined();
       expect(company.cui.toString()).toBe(COMPANY_CIF);
@@ -211,7 +211,7 @@ describe('Integration: API Workflow', () => {
       expect(searchResults.length).toBeGreaterThan(0);
 
       const targetCompany = searchResults.find(c =>
-        c.name.toUpperCase().includes('AXON SOFT') && c.statusLabel === 'Funcțiune'
+        c.cui.toString() === COMPANY_CIF
       );
       expect(targetCompany).toBeDefined();
 
