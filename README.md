@@ -15,9 +15,9 @@
 
 **job_seeker_ro_spider** — un scraper pentru job-urile Axon Soft din România. Extrage anunțurile de pe [axon-soft.com/careers/](https://axon-soft.com/careers/) și le publică în [peviitor.ro](https://peviitor.ro) prin API-ul SOLR.
 
-> **🌱 Acest repozitoriu este un scraper derivat.** A fost generat din template-ul [EPAM Systems International SRL](https://github.com/sebiboga/epam-systems-international-srl-nodejs-scraper).
+> **🌱 Acest repozitoriu este un scraper derivat.** A fost generat din template-ul [AXON SOFT Systems International SRL](https://github.com/sebiboga/epam-systems-international-srl-nodejs-scraper).
 >
-> [![Generated from epam-systems-international-srl-nodejs-scraper](https://img.shields.io/badge/Generated%20from-EPAM%20Template-2ea44f)](https://github.com/sebiboga/epam-systems-international-srl-nodejs-scraper)
+> [![Generated from epam-systems-international-srl-nodejs-scraper](https://img.shields.io/badge/Generated%20from-AXON SOFT%20Template-2ea44f)](https://github.com/sebiboga/epam-systems-international-srl-nodejs-scraper)
 
 ## Overview
 
@@ -156,7 +156,7 @@ The `automation-testing.yml` workflow runs on every push and pull request. It:
 
 ## 🌱 This Repo Is a Derived Scraper
 
-Acest scraper este derivat din template-ul [EPAM Systems International SRL](https://github.com/sebiboga/epam-systems-international-srl-nodejs-scrader).
+Acest scraper este derivat din template-ul [AXON SOFT Systems International SRL](https://github.com/sebiboga/epam-systems-international-srl-nodejs-scrader).
 
 ## Acknowledgments
 

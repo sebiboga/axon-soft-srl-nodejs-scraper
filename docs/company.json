@@ -1,11 +1,11 @@
 {
-  "cif": "33159615",
-  "legalName": "EPAM SYSTEMS INTERNATIONAL SRL",
-  "brand": "EPAM",
-  "website": "https://www.epam.com",
-  "careerUrl": "https://careers.epam.com",
-  "apiBase": "https://careers.epam.com",
+  "cif": "13049596",
+  "legalName": "AXON SOFT SRL",
+  "brand": "AXON SOFT",
+  "website": "https://axon-soft.com",
+  "careerUrl": "https://axon-soft.com/careers/",
+  "apiBase": "https://axon-soft.com",
   "apiCountryId": "8150000000000001155",
-  "defaultLocation": "București",
-  "scraperFile": "https://raw.githubusercontent.com/sebiboga/epam-systems-international-srl-nodejs-scraper/main/.github/workflows/job-seeker-ro-spider.yml"
+  "defaultLocation": "Cluj-Napoca",
+  "scraperFile": "https://raw.githubusercontent.com/sebiboga/axon-soft-srl-nodejs-scraper/main/.github/workflows/job-seeker-ro-spider.yml"
 }
