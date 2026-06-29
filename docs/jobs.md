@@ -10,11 +10,11 @@
 | Location | Str.  NASAUD, 14, Municipiul Cluj-Napoca, Cluj |
 | Website | [https://axon-soft.com](https://axon-soft.com) |
 | Careers | [https://axon-soft.com/careers/](https://axon-soft.com/careers/) |
-| Last Scraped | 2026-06-27 |
+| Last Scraped | 2026-06-29 |
 
 ## Current Job Listings (1)
 
-_Generated: 2026-06-27T13:10:44.912Z_
+_Generated: 2026-06-29T11:12:28.523Z_
 
 ### PROGRAMATOR
 
